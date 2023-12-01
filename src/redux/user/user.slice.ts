@@ -60,6 +60,9 @@ export const userSlice = createSlice({
   reducers: {
     saveListUser: (state, action: PayloadAction<User[]>) => {
       state.listUser = action.payload
+    },
+    resetState: (state) => {
+      state.success = false
     }
   },
   extraReducers: (builder) => {
@@ -72,6 +75,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { saveListUser } = userSlice.actions
+export const { saveListUser, resetState } = userSlice.actions
 
 export default userSlice.reducer

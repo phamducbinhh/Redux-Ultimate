@@ -2,7 +2,6 @@ import Table from 'react-bootstrap/Table'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '~/redux/hooks'
 import { fetchListUser } from '~/redux/user/user.slice'
-import { toast } from 'react-toastify'
 import { Button } from 'react-bootstrap'
 import UserCreateModal from '../Modal/user.create.modal'
 import UserEditModal from '../Modal/user.edit.modal'
@@ -26,7 +25,6 @@ const UsersTable: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchListUser())
-    toast('🦄 Wow so easy!')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
