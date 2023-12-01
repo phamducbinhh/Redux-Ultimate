@@ -22,6 +22,7 @@ const Header = () => {
             type='switch'
             id='custom-switch'
             value={state.isDarkMode}
+            defaultChecked={state.isDarkMode === 'light' ? false : true}
             onChange={toggleDarkMode}
             label={
               state.isDarkMode === 'light' ? (
