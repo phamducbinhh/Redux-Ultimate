@@ -11,8 +11,10 @@ interface UserPayload {
 }
 const initialState: {
   listUser: User[]
+  success: boolean
 } = {
-  listUser: []
+  listUser: [],
+  success: false
 }
 
 export const fetchListUser = createAsyncThunk('users/fetchUser', async () => {
@@ -29,7 +31,7 @@ export const fetchListUser = createAsyncThunk('users/fetchUser', async () => {
   }
 })
 
-export const createNewUser = createAsyncThunk('users/createUser', async (payload: UserPayload) => {
+export const createNewUser = createAsyncThunk('users/createUser', async (payload: UserPayload, { dispatch }) => {
   try {
     const response = await fetch('http://localhost:8000/users', {
       method: 'POST',
@@ -42,6 +44,9 @@ export const createNewUser = createAsyncThunk('users/createUser', async (payload
       }
     })
     const data = await response.json()
+    if (data.id) {
+      dispatch(fetchListUser())
+    }
     return data
   } catch (error) {
     console.error('Error during fetchListUser:', error)
@@ -60,7 +65,10 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchListUser.fulfilled, (state, action) => {
       state.listUser = action.payload
-    })
+    }),
+      builder.addCase(createNewUser.fulfilled, (state) => {
+        state.success = true
+      })
   }
 })
 

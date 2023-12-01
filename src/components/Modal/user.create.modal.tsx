@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Modal, Button, FloatingLabel, Form } from 'react-bootstrap'
-import { useAppDispatch } from '~/redux/hooks'
+import { useAppDispatch, useAppSelector } from '~/redux/hooks'
 import { createNewUser } from '~/redux/user/user.slice'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const UserCreateModal = ({ isOpenCreateModal, setIsOpenCreateModal }: any) => {
@@ -8,9 +8,10 @@ const UserCreateModal = ({ isOpenCreateModal, setIsOpenCreateModal }: any) => {
     email: '',
     name: ''
   })
-
   const { email, name } = formData
   const dispatch = useAppDispatch()
+  const state = useAppSelector((state) => state.users)
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (e: any) => {
     setFormData({
@@ -18,6 +19,12 @@ const UserCreateModal = ({ isOpenCreateModal, setIsOpenCreateModal }: any) => {
       [e.target.name]: e.target.value
     })
   }
+
+  useEffect(() => {
+    if (state.success === true) {
+      setIsOpenCreateModal(false)
+    }
+  }, [setIsOpenCreateModal, state.success])
 
   const handleSubmit = () => {
     if (!email.trim()) {
