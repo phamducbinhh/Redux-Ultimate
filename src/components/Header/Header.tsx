@@ -5,6 +5,7 @@ import { useDarkMode } from '~/context/Store-Context'
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode()
+
   return (
     <Navbar className='bg-body-tertiary' data-bs-theme={isDarkMode}>
       <Container>
