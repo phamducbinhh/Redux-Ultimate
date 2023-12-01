@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Modal, Button, FloatingLabel, Form } from 'react-bootstrap'
+import { useAppDispatch } from '~/redux/hooks'
+import { createNewUser } from '~/redux/user/user.slice'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const UserCreateModal = ({ isOpenCreateModal, setIsOpenCreateModal }: any) => {
   const [formData, setFormData] = useState({
@@ -8,6 +10,7 @@ const UserCreateModal = ({ isOpenCreateModal, setIsOpenCreateModal }: any) => {
   })
 
   const { email, name } = formData
+  const dispatch = useAppDispatch()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (e: any) => {
     setFormData({
@@ -25,7 +28,8 @@ const UserCreateModal = ({ isOpenCreateModal, setIsOpenCreateModal }: any) => {
       alert('Name cannot be empty')
       return
     }
-    console.log('>>> check create: ', { email, name })
+    //call api post redux
+    dispatch(createNewUser(formData))
   }
 
   return (

@@ -5,6 +5,10 @@ interface User {
   name: string
   email: string
 }
+interface UserPayload {
+  email: string
+  name: string
+}
 const initialState: {
   listUser: User[]
 } = {
@@ -17,6 +21,26 @@ export const fetchListUser = createAsyncThunk('users/fetchUser', async () => {
     if (!response.ok) {
       throw new Error('Error fetching user data')
     }
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Error during fetchListUser:', error)
+    throw error // Rethrow the error to propagate it to the component.
+  }
+})
+
+export const createNewUser = createAsyncThunk('users/createUser', async (payload: UserPayload) => {
+  try {
+    const response = await fetch('http://localhost:8000/users', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: payload.email,
+        name: payload.name
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
     const data = await response.json()
     return data
   } catch (error) {
