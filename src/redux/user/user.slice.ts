@@ -7,17 +7,19 @@ interface User {
 }
 interface UserPayload {
   id?: string
-  email: string
-  name: string
+  email?: string
+  name?: string
 }
 const initialState: {
   listUser: User[]
   success: boolean
   updateSuccess: boolean
+  deleteSuccess: boolean
 } = {
   listUser: [],
   success: false,
-  updateSuccess: false
+  updateSuccess: false,
+  deleteSuccess: false
 }
 
 export const fetchListUser = createAsyncThunk('users/fetchUser', async () => {
@@ -77,6 +79,20 @@ export const updateNewUser = createAsyncThunk('users/updateUser', async (payload
     throw error // Rethrow the error to propagate it to the component.
   }
 })
+export const deleteNewUser = createAsyncThunk('users/deleteUser', async (payload: UserPayload, { dispatch }) => {
+  try {
+    await fetch(`http://localhost:8000/users/${payload?.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': ' application/json'
+      }
+    })
+    dispatch(fetchListUser())
+  } catch (error) {
+    console.error('Error during fetchListUser:', error)
+    throw error // Rethrow the error to propagate it to the component.
+  }
+})
 
 export const userSlice = createSlice({
   name: 'users',
@@ -90,21 +106,28 @@ export const userSlice = createSlice({
     },
     resetStateUpdate: (state) => {
       state.updateSuccess = false
+    },
+    resetStateDelete: (state) => {
+      state.deleteSuccess = false
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchListUser.fulfilled, (state, action) => {
-      state.listUser = action.payload
-    }),
-      builder.addCase(createNewUser.fulfilled, (state) => {
+    builder
+      .addCase(fetchListUser.fulfilled, (state, action) => {
+        state.listUser = action.payload
+      })
+      .addCase(createNewUser.fulfilled, (state) => {
         state.success = true
       })
-    builder.addCase(updateNewUser.fulfilled, (state) => {
-      state.updateSuccess = true
-    })
+      .addCase(updateNewUser.fulfilled, (state) => {
+        state.updateSuccess = true
+      })
+      .addCase(deleteNewUser.fulfilled, (state) => {
+        state.deleteSuccess = true
+      })
   }
 })
 
-export const { saveListUser, resetState, resetStateUpdate } = userSlice.actions
+export const { saveListUser, resetState, resetStateUpdate, resetStateDelete } = userSlice.actions
 
 export default userSlice.reducer
