@@ -1,11 +1,14 @@
 import Header from './components/Header'
 import TabsContent from './components/TabsContent'
+import { DarkModeProvider } from './context/Store-Context'
 
 const App = () => {
   return (
     <>
-      <Header />
-      <TabsContent />
+      <DarkModeProvider>
+        <Header />
+        <TabsContent />
+      </DarkModeProvider>
     </>
   )
 }
