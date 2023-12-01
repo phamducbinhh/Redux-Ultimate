@@ -8,8 +8,8 @@ const Header = () => {
   const state = useAppSelector((state) => state.app)
   const dispatch = useAppDispatch()
 
-  const toggleDarkMode = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setIsDarkMode(e.target.value === 'light' ? 'dark' : 'light'))
+  const toggleDarkMode = () => {
+    dispatch(setIsDarkMode(state.isDarkMode === 'light' ? 'dark' : 'light'))
   }
 
   return (
